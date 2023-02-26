@@ -1,0 +1,111 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code.
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*.
+
+```{r}
+spacetitanic <- read.csv('titanic.csv')
+spacetitanic
+```
+
+```{r}
+filter(spacetitanic,Age < 21)
+view(filter(spacetitanic, Age < 21))
+```
+
+```{r}
+filter(spacetitanic, CryoSleep == 'True', Transported == 'True')
+view(filter(spacetitanic, CryoSleep == 'True', Transported == 'True'))
+```
+
+```{r}
+view(arrange(spacetitanic, HomePlanet, CryoSleep,Transported, desc(Age)))
+arrange(spacetitanic,Destination)
+spacetitanic$Destination
+```
+
+```{r}
+select(spacetitanic, HomePlanet, Destination, Transported)
+```
+
+```{r}
+view(summarize(spacetitanic, mean(Age, na.rm = TRUE)))
+```
+
+```{r}
+dest <- group_by(spacetitanic, Transported)
+view(summarize(dest, meanAge = mean(Age, na.rm = TRUE)))
+#Age doesn't seem to matter
+```
+
+```{r}
+dest <- group_by(spacetitanic, Transported)
+view(summarize(dest, meanRS = mean(RoomService, na.rm = TRUE)))
+#less money spent, less likely to be transported
+```
+
+```{r}
+dest <- group_by(spacetitanic, Transported)
+view(summarize(dest, meanFC = mean(FoodCourt, na.rm = TRUE)))
+#slightly less likely to be transported if you spent less at FC
+```
+
+```{r}
+dest <- group_by(spacetitanic, Transported)
+view(summarize(dest, meanSM = mean(ShoppingMall, na.rm = TRUE)))
+#not alot of diff for shopping mall money spent
+```
+
+```{r}
+dest <- group_by(spacetitanic, Transported)
+view(summarize(dest, meanSpa = mean(Spa, na.rm = TRUE)))
+#less money spent, less likely to be transported
+```
+
+```{r}
+dest <- group_by(spacetitanic, Transported)
+view(summarize(dest, meanVR = mean(VRDeck, na.rm = TRUE)))
+#more money spent, less likely to be transported
+```
+
+```{r}
+spacetitanic %>% count(HomePlanet, sort = TRUE)
+```
+
+```{r}
+spacetitanic %>% count(Destination, sort = TRUE)
+```
+
+```{r}
+ggplot(data = spacetitanic) +
+  geom_boxplot(mapping = aes(x = Transported, y = Age))
+```
+
+```{r}
+ggplot(data = spacetitanic) +
+  geom_density(mapping = aes(x = Age))
+```
+
+```{r}
+#Conclusions: 
+#You were more likely to be transported if you had CryoSleep
+#The mean age was 28.8
+#Age does not seem to matter in whether you were transported or not
+#The less money spent on room service, the less likely you were to be transported
+# You were slightly less likely to be transported if you spent less at the food court
+#There was not a lot of difference in whether or not you were transported for shopping mall money spent
+#The less money spent at the spa, the less likely you were to be transported
+#The more money you spent on the VR deck the less likely you were to be transported
+#Most of the traverlers home planet was Earth
+#The most common destination was TRAPPIST-1e
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
